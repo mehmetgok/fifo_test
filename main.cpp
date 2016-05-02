@@ -58,14 +58,14 @@ int main(void) {
 	{
 		fifoProdTimes->get(&file_value);
 		
-		fprintf (pFileProdTimes, "%ld\r\n", file_value);
+		fprintf (pFileProdTimes, "%lld\r\n", file_value);
 	}
 	
 	while (fifoConsTimes->available())
 	{
 		fifoConsTimes->get(&file_value);
 		
-		fprintf (pFileConsTimes, "%ld\r\n", file_value);
+		fprintf (pFileConsTimes, "%lld\r\n", file_value);
 	}
 	
 	
