@@ -16,8 +16,6 @@ fifo *time_ticks;
 
 static volatile int keepRunning = 1;
 
-
-
 void intrHandler(int dummy) {
     keepRunning = 0;
 }
