@@ -9,7 +9,7 @@
 
 #include "fifo.h"
 
-#define STEP_LIMIT 100
+#define STEP_LIMIT 1000
 
 fifo *fifoData, *fifoProdTimes, *fifoConsTimes;
 
@@ -58,14 +58,14 @@ int main(void) {
 	{
 		fifoProdTimes->get(&file_value);
 		
-		fprintf (pFileProdTimes, "%lld\r\n", file_value);
+		fprintf (pFileProdTimes, "%lu\r\n", file_value);
 	}
 	
 	while (fifoConsTimes->available())
 	{
 		fifoConsTimes->get(&file_value);
 		
-		fprintf (pFileConsTimes, "%lld\r\n", file_value);
+		fprintf (pFileConsTimes, "%lu\r\n", file_value);
 	}
 	
 	
