@@ -1,6 +1,6 @@
 CC=g++
-CFLAGS=-c -Wall
-LIBS=-lpthread
+CFLAGS=-c -Wall -O2
+LIBS=-lpthread -lrt
 
 all: fifot
 
@@ -11,7 +11,7 @@ main.o: main.cpp
 	$(CC) $(CFLAGS) main.cpp
 
 fifo.o: fifo.cpp
-	$(CC) $(CFLAGS)  fifo.cpp
+	$(CC) $(CFLAGS) fifo.cpp
 
 clean:
 	rm *o fifot
