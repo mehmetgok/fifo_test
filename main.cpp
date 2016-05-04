@@ -16,7 +16,7 @@ fifo *fifoData, *fifoProdTimes, *fifoConsTimes;
 static volatile int keepRunning = 1;
 
 void intrHandler(int dummy) {
-    keepRunning = 0;
+	keepRunning = 0;
 }
 
 pthread_t thDataGetter, thDataProcessor;
@@ -49,7 +49,7 @@ int main(void) {
 	
 	pthread_create(&thDataGetter, NULL, &dataGetter, NULL);
 	pthread_create(&thDataProcessor, NULL,  &dataProcessor, NULL);
-		
+	
 	
 	pthread_join( thDataGetter, NULL);	
 	pthread_join( thDataProcessor, NULL);
@@ -100,28 +100,28 @@ void *dataGetter(void*) {
 		if (fifoData->free()>0) 
 		{
 			// printf("Free:%d\r\n", fifoData->free() );
-		
+			
 			fifoData->put((uint64_t) counts);
 			
 			
-				gettimeofday(&prodTime, NULL);
-		
-		prod_time = (prodTime.tv_sec * (uint64_t)1000000) + (prodTime.tv_usec);
-		
-		if (fifoProdTimes->free()>0) 
-		{
-			// printf("Free:%d\r\n", fifoProdTimes->free() );
-		
-			fifoProdTimes->put(prod_time);
-		}
-		else
-		{
-			printf("No Room for the value, free: %d\r\n", fifoProdTimes->free() );
-			break;
-		}
+			gettimeofday(&prodTime, NULL);
 			
+			prod_time = (prodTime.tv_sec * (uint64_t)1000000) + (prodTime.tv_usec);
+			
+			if (fifoProdTimes->free()>0) 
+			{
+				// printf("Free:%d\r\n", fifoProdTimes->free() );
 				
-		counts++;
+				fifoProdTimes->put(prod_time);
+			}
+			else
+			{
+				printf("No Room for the value, free: %d\r\n", fifoProdTimes->free() );
+				break;
+			}
+			
+			
+			counts++;
 			
 			
 		}
@@ -135,10 +135,10 @@ void *dataGetter(void*) {
 		pthread_mutex_unlock(&lock);
 		
 		usleep(500);
-	
+		
 		
 		if (counts>STEP_LIMIT)
-			break;
+		break;
 	}
 	
 }
@@ -162,41 +162,31 @@ void *dataProcessor(void*) {
 		if (fifoData->available()>0) 
 		{
 			// printf("Free:%d\r\n", fifoData->free() );
-		
+			
 			fifoData->get(&count_data);
 			
 			
-				gettimeofday(&consTime, NULL);
-		
-		cons_time = (consTime.tv_sec * (uint64_t)1000000) + (consTime.tv_usec);
-		
-		if (fifoConsTimes->free()>0) 
-		{
-			// printf("Free:%d\r\n", fifoProdTimes->free() );
-		
-			fifoConsTimes->put(cons_time);
-		}
-		else
-		{
-			printf("No Room for the value, free: %d\r\n", fifoConsTimes->free() );
+			gettimeofday(&consTime, NULL);
 			
-		}
-		
-		
-		
-		
-		
-		
-		counts++;
+			cons_time = (consTime.tv_sec * (uint64_t)1000000) + (consTime.tv_usec);
+			
+			if (fifoConsTimes->free()>0) 
+			{
+				// printf("Free:%d\r\n", fifoProdTimes->free() );
+				
+				fifoConsTimes->put(cons_time);
+			}
+			else
+			{
+				printf("No Room for the value, free: %d\r\n", fifoConsTimes->free() );
+				
+			}
 			
 			
 			
 			
 			
-			
-			
-			
-			
+			counts++;
 			
 			
 			
@@ -204,18 +194,18 @@ void *dataProcessor(void*) {
 		else
 		{
 			printf("No Data available int the queue: %d\r\n",  fifoData->available() );
-		
+			
 		}
 		
 		
-    	 pthread_mutex_unlock(&lock);
-		 
-		 usleep(500);
+		pthread_mutex_unlock(&lock);
 		
-	
+		usleep(500);
+		
+		
 		
 		if (counts>STEP_LIMIT)
-			break;
-	
+		break;
+		
 	}
 }
