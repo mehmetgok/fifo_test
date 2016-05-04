@@ -83,12 +83,11 @@ int main(void) {
 	 /* Lock memory */
 
         if(mlockall(MCL_CURRENT|MCL_FUTURE) == -1) {
-                perror("mlockall failed");
-                exit(-2);
+            perror("mlockall failed");
+            exit(-2);
         }
 		
 			stack_prefault();
-	
 	
 	signal(SIGINT, intrHandler);
 	
@@ -100,9 +99,6 @@ int main(void) {
 	fifoConsTimes = new fifo;
 	
 	
-	
-	
-	 
 	if (pthread_mutex_init(&lock, NULL) != 0)
     {
         printf("\n mutex init failed\n");
@@ -124,9 +120,9 @@ int main(void) {
 	
 	
 	pthread_detach(thDataGetter);
-	 pthread_detach(thDataProcessor);
+	pthread_detach(thDataProcessor);
 	 
-	 pthread_mutex_destroy(&lock);
+	pthread_mutex_destroy(&lock);
 
 
 	
@@ -182,10 +178,6 @@ void *dataGetter(void*) {
 	
 	
 	
-	
-
-	
-	
 	/* Declare ourself as a real time task */
 
         param.sched_priority = MY_PRIORITY_1;
@@ -194,11 +186,6 @@ void *dataGetter(void*) {
                 exit(-1);
         }
 		
-		
-	
-
-      
-        
         
            clock_gettime(CLOCK_MONOTONIC ,&t);
         /* start after 500 usecs */
@@ -211,7 +198,7 @@ void *dataGetter(void*) {
 		      /* wait until next shot */
                 clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t, NULL);
 				
-				clock_gettime( CLOCK_MONOTONIC, &prodTime);
+				
 		
 		// Add value to the queue
 		
@@ -230,8 +217,8 @@ void *dataGetter(void*) {
 			// prod_time = (prodTime.tv_sec * (uint64_t)1000000.0) + (uint64_t)(prodTime.tv_usec);
 			
 			
-			
-				
+			// Get real time clock
+			clock_gettime( CLOCK_MONOTONIC, &prodTime);	
 			
 			// convert to micro seconds			
 			prod_time = (prodTime.tv_sec*(uint64_t)BILLION + (uint64_t)prodTime.tv_nsec)/1000;
@@ -327,7 +314,7 @@ void *dataProcessor(void*) {
 		
 		 clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t, NULL);
 		 
-		 clock_gettime( CLOCK_MONOTONIC, &consTime);
+		
 		
 		pthread_mutex_lock(&lock);
 			
@@ -341,6 +328,8 @@ void *dataProcessor(void*) {
 			//cons_time = (consTime.tv_sec * (uint64_t)1000000) + (uint64_t)(consTime.tv_usec);
 			
 			
+			// Get realtime clock
+			clock_gettime( CLOCK_MONOTONIC, &consTime);			
 			
 			// convert to micro seconds			
 			cons_time = (consTime.tv_sec*(uint64_t)BILLION + (uint64_t)consTime.tv_nsec)/1000;
@@ -360,15 +349,13 @@ void *dataProcessor(void*) {
 			}
 				
 		
-			counts++;
-			
+			counts++;		
 			
 			
 		}
 		else
 		{
-			printf("No Data available int the queue: %d\r\n",  fifoData->available() );
-		
+			// printf("No Data available int the queue: %d\r\n",  fifoData->available() );		
 		}
 		
 		pthread_mutex_unlock(&lock);
