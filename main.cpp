@@ -218,7 +218,7 @@ void *dataGetter(void*) {
 			
 			
 			// Get real time clock
-			clock_gettime( CLOCK_MONOTONIC, &prodTime);	
+			clock_gettime( CLOCK_REALTIME, &prodTime);	
 			
 			// convert to micro seconds			
 			prod_time = (prodTime.tv_sec*(uint64_t)BILLION + (uint64_t)prodTime.tv_nsec)/1000;
@@ -329,7 +329,7 @@ void *dataProcessor(void*) {
 			
 			
 			// Get realtime clock
-			clock_gettime( CLOCK_MONOTONIC, &consTime);			
+			clock_gettime( CLOCK_REALTIME, &consTime);			
 			
 			// convert to micro seconds			
 			cons_time = (consTime.tv_sec*(uint64_t)BILLION + (uint64_t)consTime.tv_nsec)/1000;
