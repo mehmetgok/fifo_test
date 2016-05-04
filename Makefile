@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-c -Wall -O2
+CFLAGS=-c -Wall -O2  -march=armv7-a -mtune=cortex-a8
 LIBS=-lpthread -lrt
 
 all: fifot

@@ -16,10 +16,6 @@
 //#include <linux/spinlock.h>
 
 
-
-
-
-
 #include "fifo.h"
 
 #define STEP_LIMIT 1000
